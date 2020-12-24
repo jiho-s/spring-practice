@@ -1,5 +1,8 @@
 package me.jiho.oauthdemo.config;
 
+import lombok.RequiredArgsConstructor;
+import me.jiho.oauthdemo.config.auth.CustomOAuth2UserService;
+import me.jiho.oauthdemo.config.auth.CustomOidcUserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
@@ -26,43 +29,48 @@ import java.util.Map;
 
 import static org.springframework.security.oauth2.client.web.reactive.function.client.ServletOAuth2AuthorizedClientExchangeFilterFunction.oauth2AuthorizedClient;
 
+@RequiredArgsConstructor
 @Configuration
 public class WebConfig extends WebSecurityConfigurerAdapter {
 
-    @Bean
-    public WebClient rest(ClientRegistrationRepository clients, OAuth2AuthorizedClientRepository auth) {
-        ServletOAuth2AuthorizedClientExchangeFilterFunction oauth2 =
-                new ServletOAuth2AuthorizedClientExchangeFilterFunction(clients, auth);
-        return WebClient.builder()
-                .filter(oauth2).build();
-    }
+    private final CustomOidcUserService customOidcUserService;
 
-    @Bean
-    public OAuth2UserService<OAuth2UserRequest, OAuth2User> oauth2UserService(WebClient rest) {
-        DefaultOAuth2UserService delegate = new DefaultOAuth2UserService();
-        return request -> {
-            OAuth2User user = delegate.loadUser(request);
-            if (!"github".equals(request.getClientRegistration().getRegistrationId())) {
-                return user;
-            }
+    private final CustomOAuth2UserService customOAuth2UserService;
 
-            OAuth2AuthorizedClient client = new OAuth2AuthorizedClient
-                    (request.getClientRegistration(), user.getName(), request.getAccessToken());
-            String url = user.getAttribute("organizations_url");
-            List<Map<String, Object>> orgs = rest
-                    .get().uri(url)
-                    .attributes(oauth2AuthorizedClient(client))
-                    .retrieve()
-                    .bodyToMono(List.class)
-                    .block();
-
-            if (orgs.stream().anyMatch(org -> "spring-projects".equals(org.get("login")))) {
-                return user;
-            }
-
-            throw new OAuth2AuthenticationException(new OAuth2Error("invalid_token", "Not in Spring Team", ""));
-        };
-    }
+//    @Bean
+//    public WebClient rest(ClientRegistrationRepository clients, OAuth2AuthorizedClientRepository auth) {
+//        ServletOAuth2AuthorizedClientExchangeFilterFunction oauth2 =
+//                new ServletOAuth2AuthorizedClientExchangeFilterFunction(clients, auth);
+//        return WebClient.builder()
+//                .filter(oauth2).build();
+//    }
+//
+//    @Bean
+//    public OAuth2UserService<OAuth2UserRequest, OAuth2User> oauth2UserService(WebClient rest) {
+//        DefaultOAuth2UserService delegate = new DefaultOAuth2UserService();
+//        return request -> {
+//            OAuth2User user = delegate.loadUser(request);
+//            if (!"github".equals(request.getClientRegistration().getRegistrationId())) {
+//                return user;
+//            }
+//
+//            OAuth2AuthorizedClient client = new OAuth2AuthorizedClient
+//                    (request.getClientRegistration(), user.getName(), request.getAccessToken());
+//            String url = user.getAttribute("organizations_url");
+//            List<Map<String, Object>> orgs = rest
+//                    .get().uri(url)
+//                    .attributes(oauth2AuthorizedClient(client))
+//                    .retrieve()
+//                    .bodyToMono(List.class)
+//                    .block();
+//
+//            if (orgs.stream().anyMatch(org -> "spring-projects".equals(org.get("login")))) {
+//                return user;
+//            }
+//
+//            throw new OAuth2AuthenticationException(new OAuth2Error("invalid_token", "Not in Spring Team", ""));
+//        };
+//    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -79,6 +87,11 @@ public class WebConfig extends WebSecurityConfigurerAdapter {
                     // 인증이 실패 할 때마다 세션에 오류 메시지를 저장
                     request.getSession().setAttribute("error.message", exception.getMessage());
                     handler.onAuthenticationFailure(request, response, exception);
-                }));
+                })
+//                        .userInfoEndpoint(userInfoEndpointConfig -> userInfoEndpointConfig
+//                                .userService(customOAuth2UserService)
+//                                .oidcUserService(customOidcUserService)
+//                        )
+                );
     }
 }
