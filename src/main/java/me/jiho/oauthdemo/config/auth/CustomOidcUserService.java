@@ -1,6 +1,7 @@
 package me.jiho.oauthdemo.config.auth;
 
 import me.jiho.oauthdemo.config.auth.dto.OAuthAttributes;
+import me.jiho.oauthdemo.config.auth.user.CustomOidcUser;
 import me.jiho.oauthdemo.domain.member.Member;
 import me.jiho.oauthdemo.domain.member.MemberRepository;
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserRequest;
@@ -25,15 +26,19 @@ public class CustomOidcUserService extends BaseOAuth2UserService implements OAut
         OidcUserService delegate = new OidcUserService();
         OidcUser oidcUser = delegate.loadUser(userRequest);
 
-//        String registrationId = userRequest.getClientRegistration().getRegistrationId();
-//        String userNameAttributeName = userRequest.getClientRegistration().getProviderDetails()
-//                .getUserInfoEndpoint().getUserNameAttributeName();
-//
-//        OAuthAttributes attributes = OAuthAttributes.of(registrationId, userNameAttributeName, oidcUser.getAttributes());
-//
-//        Member member = loadOrCreate(attributes);
+        String registrationId = userRequest.getClientRegistration().getRegistrationId();
+        String userNameAttributeName = userRequest.getClientRegistration().getProviderDetails()
+                .getUserInfoEndpoint().getUserNameAttributeName();
 
-        Map<String, Object> claims = oidcUser.getClaims();
-        return null;
+        OAuthAttributes attributes = OAuthAttributes.of(registrationId, userNameAttributeName, oidcUser.getAttributes());
+
+        Member member = loadOrCreate(attributes);
+
+        return CustomOidcUser.builder()
+                .id(member.getId())
+                .authorities(authorities(member.getRole()))
+                .idToken(userRequest.getIdToken())
+                .nameAttributeKey(attributes.getNameAttributeKey())
+                .build();
     }
 }

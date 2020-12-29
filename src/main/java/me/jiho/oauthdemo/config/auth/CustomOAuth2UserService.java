@@ -1,6 +1,8 @@
 package me.jiho.oauthdemo.config.auth;
 
 import me.jiho.oauthdemo.config.auth.dto.OAuthAttributes;
+import me.jiho.oauthdemo.config.auth.user.CustomOAuth2User;
+import me.jiho.oauthdemo.domain.member.Member;
 import me.jiho.oauthdemo.domain.member.MemberRepository;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
@@ -27,7 +29,12 @@ public class CustomOAuth2UserService extends BaseOAuth2UserService implements OA
 
         OAuthAttributes attributes = OAuthAttributes.of(registrationId, userNameAttributeName, oAuth2User.getAttributes());
 
-        loadOrCreate(attributes);
-        return null;
+        Member member = loadOrCreate(attributes);
+        return CustomOAuth2User.builder()
+                .id(member.getId())
+                .authorities(authorities(member.getRole()))
+                .attributes(attributes.getAttributes())
+                .nameAttributeKey(attributes.getNameAttributeKey())
+                .build();
     }
 }
