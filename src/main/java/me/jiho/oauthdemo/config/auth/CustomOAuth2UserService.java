@@ -12,7 +12,7 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
 @Service
-public class CustomOAuth2UserService extends BaseOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
+public class CustomOAuth2UserService extends BaseUserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
 
     public CustomOAuth2UserService(MemberRepository memberRepository) {
         super(memberRepository);

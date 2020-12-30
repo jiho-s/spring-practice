@@ -12,7 +12,7 @@ import java.util.Map;
 
 @RestController
 public class SocialApplication {
-
+    
     @GetMapping("/user")
     public Map<String, Object> user(@CurrentUserId Long principal) {
 //        return Collections.singletonMap("name", principal.getAttribute("login"));

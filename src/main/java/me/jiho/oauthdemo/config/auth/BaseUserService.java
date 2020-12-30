@@ -14,8 +14,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
-public abstract class BaseOAuth2UserService {
-    private final MemberRepository memberRepository;
+public abstract class BaseUserService {
+    protected final MemberRepository memberRepository;
 
     protected Member loadOrCreate(OAuthAttributes attributes) {
         return memberRepository.findByEmail(attributes.getEmail())

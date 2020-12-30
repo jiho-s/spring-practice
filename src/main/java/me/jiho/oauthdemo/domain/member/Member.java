@@ -20,6 +20,8 @@ public class Member extends BaseEntity {
 
     private String email;
 
+    private String password;
+
     @ElementCollection
     @Enumerated(value = EnumType.ORDINAL)
     Set<MemberRole> role;
