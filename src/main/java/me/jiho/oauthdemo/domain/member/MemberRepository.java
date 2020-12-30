@@ -9,4 +9,6 @@ public interface MemberRepository extends BaseRepository<Member> {
 
     @EntityGraph(attributePaths = "role")
     Optional<Member> findByEmail(String email);
+
+    boolean existsByEmail(String email);
 }

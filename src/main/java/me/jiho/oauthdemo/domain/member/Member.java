@@ -27,7 +27,7 @@ public class Member extends BaseEntity {
     Set<MemberRole> role;
 
     @Builder
-    public Member(String name, String email, Set<MemberRole> role) {
+    public Member(String name, String email, String password,Set<MemberRole> role) {
         this.name = name;
         this.email = email;
         this.role = role;
