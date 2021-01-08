@@ -3,11 +3,13 @@ package com.github.prgrms.socialserver.domain;
 import java.time.LocalDateTime;
 
 /**
+ * domain object for User
+ *
  * @author jiho
  * @since 2021/01/08
  */
 public class User {
-    private final Long seq;
+    private Long seq;
 
     private final String email;
 
@@ -47,6 +49,10 @@ public class User {
 
     public LocalDateTime getCreateAt() {
         return createAt;
+    }
+
+    public void setSeq(Long seq) {
+        this.seq = seq;
     }
 
     public void setPasswd(String passwd) {
