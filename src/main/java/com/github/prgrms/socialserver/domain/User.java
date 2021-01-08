@@ -1,4 +1,4 @@
-package com.github.prgrms.socialserver.entity;
+package com.github.prgrms.socialserver.domain;
 
 import java.time.LocalDateTime;
 
