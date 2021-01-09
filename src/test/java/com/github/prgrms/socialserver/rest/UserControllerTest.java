@@ -68,7 +68,7 @@ class UserControllerTest {
                 .content(objectMapper.writeValueAsString(userRequestDto))
                 .contentType(MediaType.APPLICATION_JSON)
         )
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andDo(print());
     }
 

@@ -4,6 +4,7 @@ import com.github.prgrms.socialserver.rest.dto.UserCreateResponseDto;
 import com.github.prgrms.socialserver.rest.dto.UserRequestDto;
 import com.github.prgrms.socialserver.service.UserService;
 import com.github.prgrms.socialserver.service.exception.DuplicateEmailException;
+import org.springframework.context.MessageSource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.support.WebExchangeBindException;
 import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -25,14 +27,17 @@ public class UserController {
 
     private final UserService userService;
 
-    public UserController(UserService userService) {
+    private final MessageSource messageSource;
+
+    public UserController(UserService userService, MessageSource messageSource) {
         this.userService = userService;
+        this.messageSource = messageSource;
     }
 
     @PostMapping("/join")
     public ResponseEntity createUser(@RequestBody @Valid UserRequestDto userRequestDto) {
         userService.saveUser(userRequestDto);
-        return ResponseEntity.ok(true);
+        return ResponseEntity.created(null).body(new UserCreateResponseDto(true, messageSource.getMessage("join", null, Locale.KOREA)));
     }
 
     @GetMapping
