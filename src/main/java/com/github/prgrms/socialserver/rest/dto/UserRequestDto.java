@@ -10,7 +10,7 @@ import javax.validation.constraints.NotBlank;
 public class UserRequestDto {
     @Email
     private final String principal;
-    @NotBlank
+    @NotBlank(message = "must be not blank")
     private final String credentials;
 
     public UserRequestDto(@Email String principal, @NotBlank String credentials) {

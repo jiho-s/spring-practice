@@ -3,11 +3,14 @@ package com.github.prgrms.socialserver.rest;
 import com.github.prgrms.socialserver.rest.dto.UserCreateResponseDto;
 import com.github.prgrms.socialserver.rest.dto.UserRequestDto;
 import com.github.prgrms.socialserver.service.UserService;
+import com.github.prgrms.socialserver.service.exception.DuplicateEmailException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.support.WebExchangeBindException;
 
+import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.Map;
@@ -42,6 +45,15 @@ public class UserController {
         return ResponseEntity.badRequest().body(new UserCreateResponseDto(
                 false,
                 errors
+        ));
+    }
+
+    @ExceptionHandler(DuplicateEmailException.class)
+    public ResponseEntity<UserCreateResponseDto> handleDuplicateEmailException(DuplicateEmailException e) {
+        Map<String, String> error = Map.of("principal", "duplicate " + e.getMessage());
+        return ResponseEntity.badRequest().body(new UserCreateResponseDto(
+                false,
+                error
         ));
     }
 }
