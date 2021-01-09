@@ -1,14 +1,19 @@
 package com.github.prgrms.socialserver.rest.dto;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+
 /**
  * @author jiho
  * @since 2021/01/09
  */
 public class UserRequestDto {
+    @Email
     private final String principal;
+    @NotBlank
     private final String credentials;
 
-    public UserRequestDto(String principal, String credentials) {
+    public UserRequestDto(@Email String principal, @NotBlank String credentials) {
         this.principal = principal;
         this.credentials = credentials;
     }
