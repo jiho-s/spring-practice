@@ -1,14 +1,16 @@
 package com.github.prgrms.socialserver.rest;
 
+import com.github.prgrms.socialserver.rest.dto.UserCreateResponseDto;
 import com.github.prgrms.socialserver.rest.dto.UserRequestDto;
 import com.github.prgrms.socialserver.service.UserService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author jiho
@@ -27,5 +29,19 @@ public class UserController {
     @PostMapping("/join")
     public ResponseEntity createUser(@RequestBody @Valid UserRequestDto userRequestDto) {
         return ResponseEntity.ok(true);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<UserCreateResponseDto> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
+        Map<String, String> errors = new HashMap<>();
+        e.getBindingResult().getAllErrors().forEach((error) -> {
+            String fieldName = ((FieldError) error).getField();
+            String errorMessage = error.getDefaultMessage();
+            errors.put(fieldName, errorMessage);
+        });
+        return ResponseEntity.badRequest().body(new UserCreateResponseDto(
+                false,
+                errors
+        ));
     }
 }

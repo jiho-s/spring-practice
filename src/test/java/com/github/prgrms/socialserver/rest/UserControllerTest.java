@@ -3,6 +3,7 @@ package com.github.prgrms.socialserver.rest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.prgrms.socialserver.rest.dto.UserRequestDto;
 import com.github.prgrms.socialserver.service.UserService;
+import com.github.prgrms.socialserver.service.dto.UserResponseDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,7 +13,10 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.junit.jupiter.api.Assertions.*;
+import java.time.LocalDateTime;
+import java.util.List;
+
+import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -35,6 +39,22 @@ class UserControllerTest {
 
     @BeforeEach
     void setup() {
+        UserResponseDto user1 = new UserResponseDto(
+                1L,
+                "test1@email.com",
+                0,
+                null,
+                LocalDateTime.now()
+        );
+        UserResponseDto user2 = new UserResponseDto(
+                2L,
+                "test2@email.com",
+                0,
+                null,
+                LocalDateTime.now()
+        );
+        given(this.userService.findAllUser()).willReturn(List.of(user1, user2));
+        given(this.userService.findUserById(user1.getSeq())).willReturn(user1);
     }
 
     @Test
