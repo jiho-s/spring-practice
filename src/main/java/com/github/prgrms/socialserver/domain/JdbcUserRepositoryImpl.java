@@ -76,4 +76,18 @@ public class JdbcUserRepositoryImpl implements UserRepository{
         return Optional.ofNullable(user);
     }
 
+    @Override
+    public boolean existByEmail(String email) throws DataAccessException {
+        Map<String, String> params = Map.of("email", email);
+         int count = this.namedParameterJdbcTemplate.queryForObject(
+                "SELECT count(*) FROM users WHERE email=:email",
+                params,
+                Integer.class
+        );
+         if (count == 0) {
+             return false;
+         }
+         return true;
+    }
+
 }

@@ -18,5 +18,7 @@ public interface UserRepository {
 
      Optional<User> findById(Long id) throws DataAccessException;
 
+     boolean existByEmail(String email) throws DataAccessException;
+
 
 }
