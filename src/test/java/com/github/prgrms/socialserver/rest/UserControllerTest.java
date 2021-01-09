@@ -17,6 +17,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -37,9 +38,11 @@ class UserControllerTest {
     @MockBean
     private UserService userService;
 
+    private UserResponseDto user1;
+
     @BeforeEach
     void setup() {
-        UserResponseDto user1 = new UserResponseDto(
+        user1 = new UserResponseDto(
                 1L,
                 "test1@email.com",
                 0,
@@ -111,6 +114,22 @@ class UserControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
         )
                 .andExpect(status().isBadRequest())
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("전체 유저 조회 성공")
+    public void testQueryUser_Success() throws Exception {
+        mockMvc.perform(get("/api/users"))
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("유저 아이디로 조회")
+    public void testGetUser_Success() throws Exception {
+        mockMvc.perform(get("/api/users/{id}", user1.getSeq()))
+                .andExpect(status().isOk())
                 .andDo(print());
     }
 }

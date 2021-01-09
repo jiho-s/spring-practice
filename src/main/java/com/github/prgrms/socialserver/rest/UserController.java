@@ -31,7 +31,18 @@ public class UserController {
 
     @PostMapping("/join")
     public ResponseEntity createUser(@RequestBody @Valid UserRequestDto userRequestDto) {
+        userService.saveUser(userRequestDto);
         return ResponseEntity.ok(true);
+    }
+
+    @GetMapping
+    public ResponseEntity queryUsers() {
+        return ResponseEntity.ok(userService.findAllUser());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity getUser(@PathVariable Long id) {
+        return ResponseEntity.ok(userService.findUserById(id));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
