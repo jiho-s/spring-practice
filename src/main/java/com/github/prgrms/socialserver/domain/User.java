@@ -27,6 +27,12 @@ public class User {
         this.createAt = createAt;
     }
 
+    public User(String email, String passwd,LocalDateTime createAt) {
+        this.email = email;
+        this.passwd = passwd;
+        this.createAt = createAt;
+    }
+
     public Long getSeq() {
         return seq;
     }
