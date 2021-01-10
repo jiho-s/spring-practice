@@ -1,9 +1,10 @@
 package com.github.prgrms.socialserver.domain;
 
+import com.github.prgrms.socialserver.service.dto.UserResponseDto;
 import org.springframework.dao.DataAccessException;
-import org.springframework.stereotype.Repository;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -12,7 +13,7 @@ import java.util.Optional;
  */
 public interface UserRepository {
 
-     void save(User user) throws DataAccessException;
+     User save(User user) throws DataAccessException;
 
      Collection<User> findAll() throws DataAccessException;
 

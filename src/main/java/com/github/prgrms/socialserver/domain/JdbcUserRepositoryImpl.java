@@ -1,5 +1,6 @@
 package com.github.prgrms.socialserver.domain;
 
+import com.github.prgrms.socialserver.service.dto.UserResponseDto;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;
@@ -10,10 +11,7 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * JDBC-based implementation of the {@link UserRepository}
@@ -39,7 +37,7 @@ public class JdbcUserRepositoryImpl implements UserRepository{
 
 
     @Override
-    public void save(User user) throws DataAccessException {
+    public User save(User user) throws DataAccessException {
         SqlParameterSource parameters = new MapSqlParameterSource()
                 .addValue("seq", user.getSeq())
                 .addValue("email", user.getEmail())
@@ -55,6 +53,7 @@ public class JdbcUserRepositoryImpl implements UserRepository{
                             "last_login_at=:last_login_at WHERE seq=:seq",
                     parameters);
         }
+        return user;
     }
 
     @Override

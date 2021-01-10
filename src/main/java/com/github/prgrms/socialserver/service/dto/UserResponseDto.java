@@ -1,5 +1,7 @@
 package com.github.prgrms.socialserver.service.dto;
 
+import com.github.prgrms.socialserver.domain.User;
+
 import java.time.LocalDateTime;
 
 /**
@@ -20,6 +22,15 @@ public class UserResponseDto {
         this.last_login_at = last_login_at;
         this.create_at = create_at;
     }
+
+    public UserResponseDto(User user) {
+        this.seq = user.getSeq();
+        this.email = user.getEmail();
+        this.login_count = user.getLoginCount();
+        this.last_login_at = user.getLastLoginAt();
+        this.create_at = user.getCreateAt();
+    }
+
 
     public Long getSeq() {
         return seq;

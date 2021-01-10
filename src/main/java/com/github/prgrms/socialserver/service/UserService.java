@@ -14,5 +14,5 @@ import java.util.List;
 public interface UserService {
     List<UserResponseDto> findAllUser();
     UserResponseDto findUserById(Long id);
-    void saveUser(UserRequestDto userRequestDto);
+    Long saveUser(UserRequestDto userRequestDto);
 }
