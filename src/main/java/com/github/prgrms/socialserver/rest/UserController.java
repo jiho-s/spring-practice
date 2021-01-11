@@ -39,7 +39,7 @@ public class UserController {
     }
 
     @PostMapping("/join")
-    public ResponseEntity<CommonResponseDto> createUser(@RequestBody @Valid UserRequestDto userRequestDto, UriComponentsBuilder uriComponentsBuilder) {
+    public ResponseEntity<CommonResponseDto<String>> createUser(@RequestBody @Valid UserRequestDto userRequestDto, UriComponentsBuilder uriComponentsBuilder) {
         Long userSeq = userService.saveUser(userRequestDto);
         UriComponents uriComponents = uriComponentsBuilder.path("/{id}").buildAndExpand(userSeq);
         return ResponseEntity
@@ -49,35 +49,38 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<List<UserResponseDto>> queryUsers() {
-        return ResponseEntity.ok(userService.findAllUser());
+    public List<UserResponseDto> queryUsers() {
+        return userService.findAllUser();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserResponseDto> getUser(@PathVariable Long id) {
-        return ResponseEntity.ok(userService.findUserById(id));
+    public UserResponseDto getUser(@PathVariable Long id) {
+        return userService.findUserById(id);
     }
 
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<CommonResponseDto<Map<String, String>>> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
+    public CommonResponseDto<Map<String, String>> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         Map<String, String> errors = new HashMap<>();
         e.getBindingResult().getAllErrors().forEach((error) -> {
             String fieldName = ((FieldError) error).getField();
             String errorMessage = error.getDefaultMessage();
             errors.put(fieldName, errorMessage);
         });
-        return ResponseEntity.badRequest().body(CommonResponseDto.fail(errors));
+        return CommonResponseDto.fail(errors);
     }
 
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(DuplicateEmailException.class)
-    public ResponseEntity<CommonResponseDto<Map<String, String>>> handleDuplicateEmailException(DuplicateEmailException e) {
+    public CommonResponseDto<Map<String, String>> handleDuplicateEmailException(DuplicateEmailException e) {
         Map<String, String> error = Map.of("principal", "duplicate " + e.getMessage());
-        return ResponseEntity.badRequest().body(CommonResponseDto.fail(error));
+        return CommonResponseDto.fail(error);
     }
 
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(IdNotFoundException.class)
-    public ResponseEntity<CommonResponseDto<Map<String, String>>> handleIdNotFoundException(IdNotFoundException e) {
+    public CommonResponseDto<Map<String, String>> handleIdNotFoundException(IdNotFoundException e) {
         Map<String, String> error = Map.of("seq", "not found " + e.getMessage());
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(CommonResponseDto.fail(error));
+        return CommonResponseDto.fail(error);
     }
 }
