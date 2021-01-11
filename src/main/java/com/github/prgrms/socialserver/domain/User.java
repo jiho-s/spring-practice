@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
  * @since 2021/01/08
  */
 public class User {
-    private Long seq;
+    private final Long seq;
 
     private final String email;
 
@@ -28,9 +28,21 @@ public class User {
     }
 
     public User(String email, String passwd,LocalDateTime createAt) {
+        this.seq = null;
         this.email = email;
         this.passwd = passwd;
         this.createAt = createAt;
+    }
+
+    public static User toSequencedUser(Long seq, User user) {
+        return new User(
+                seq,
+                user.getEmail(),
+                user.getPasswd(),
+                user.getLoginCount(),
+                user.getLastLoginAt(),
+                user.getCreateAt()
+        );
     }
 
     public Long getSeq() {
@@ -57,16 +69,11 @@ public class User {
         return createAt;
     }
 
-    public void setSeq(Long seq) {
-        this.seq = seq;
-    }
-
-    public void setPasswd(String passwd) {
-        this.passwd = passwd;
-    }
-
-    public void setLoginCount(Integer loginCount) {
-        this.loginCount = loginCount;
+    public void addLoginCount() {
+        if (loginCount == null) {
+            this.loginCount = 1;
+        }
+        this.loginCount++;
     }
 
     public void setLastLoginAt(LocalDateTime lastLoginAt) {

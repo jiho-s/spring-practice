@@ -1,6 +1,5 @@
 package com.github.prgrms.socialserver.domain;
 
-import com.github.prgrms.socialserver.service.dto.UserResponseDto;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;
@@ -11,7 +10,9 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
-import java.util.*;
+import java.util.Collection;
+import java.util.Map;
+import java.util.Optional;
 
 /**
  * JDBC-based implementation of the {@link UserRepository}
@@ -22,9 +23,9 @@ import java.util.*;
 @Repository
 public class JdbcUserRepositoryImpl implements UserRepository{
 
-    private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+    private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-    private SimpleJdbcInsert insertUser;
+    private final SimpleJdbcInsert insertUser;
 
     private final RowMapper<User> userRowMapper = BeanPropertyRowMapper.newInstance(User.class);
 
@@ -46,7 +47,7 @@ public class JdbcUserRepositoryImpl implements UserRepository{
                 .addValue("last_login_at", user.getLastLoginAt());
         if (user.getSeq() == null) {
             Number newSeq = insertUser.executeAndReturnKey(parameters);
-            user.setSeq(newSeq.longValue());
+            user = User.toSequencedUser(newSeq.longValue(), user);
         } else {
             this.namedParameterJdbcTemplate.update(
                     "UPDATE users SET email=:email, passwd=:passwd, login_count=:login_count, " +
