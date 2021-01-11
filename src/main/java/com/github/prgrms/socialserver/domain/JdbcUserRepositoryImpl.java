@@ -28,16 +28,14 @@ public class JdbcUserRepositoryImpl implements UserRepository{
 
     private final SimpleJdbcInsert insertUser;
 
-    private final RowMapper<User> userRowMapper = ((resultSet, i) -> {
-        return new User(
-                resultSet.getLong("seq"),
-                resultSet.getString("email"),
-                resultSet.getString("passwd"),
-                resultSet.getInt("login_count"),
-                resultSet.getObject("last_login_at", LocalDateTime.class),
-                resultSet.getObject("create_at", LocalDateTime.class)
-        );
-    });
+    private final RowMapper<User> userRowMapper = ((resultSet, i) -> new User(
+            resultSet.getLong("seq"),
+            resultSet.getString("email"),
+            resultSet.getString("passwd"),
+            resultSet.getInt("login_count"),
+            resultSet.getObject("last_login_at", LocalDateTime.class),
+            resultSet.getObject("create_at", LocalDateTime.class)
+    ));
 
     public JdbcUserRepositoryImpl(DataSource dataSource) {
         this.namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
@@ -101,10 +99,7 @@ public class JdbcUserRepositoryImpl implements UserRepository{
                 params,
                 Integer.class
         );
-         if (count == 0) {
-             return false;
-         }
-         return true;
+        return count != 0;
     }
 
 }
