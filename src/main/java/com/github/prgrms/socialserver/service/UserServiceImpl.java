@@ -41,7 +41,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public Long saveUser(UserRequestDto userRequestDto) {
-        if (!userRepository.existByEmail(userRequestDto.getPrincipal())) {
+        if (userRepository.existByEmail(userRequestDto.getPrincipal())) {
             throw new DuplicateEmailException(userRequestDto.getPrincipal());
         }
         User user = userRepository.save(new User(

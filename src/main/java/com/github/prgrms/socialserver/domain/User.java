@@ -31,6 +31,7 @@ public class User {
         this.seq = null;
         this.email = email;
         this.passwd = passwd;
+        this.loginCount = 0;
         this.createAt = createAt;
     }
 

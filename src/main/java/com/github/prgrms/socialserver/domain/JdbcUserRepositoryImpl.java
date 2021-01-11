@@ -1,7 +1,6 @@
 package com.github.prgrms.socialserver.domain;
 
 import org.springframework.dao.DataAccessException;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -10,6 +9,7 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
@@ -27,7 +27,16 @@ public class JdbcUserRepositoryImpl implements UserRepository{
 
     private final SimpleJdbcInsert insertUser;
 
-    private final RowMapper<User> userRowMapper = BeanPropertyRowMapper.newInstance(User.class);
+    private final RowMapper<User> userRowMapper = ((resultSet, i) -> {
+        return new User(
+                resultSet.getLong("seq"),
+                resultSet.getString("email"),
+                resultSet.getString("passwd"),
+                resultSet.getInt("login_count"),
+                resultSet.getObject("last_login_at", LocalDateTime.class),
+                resultSet.getObject("create_at", LocalDateTime.class)
+        );
+    });
 
     public JdbcUserRepositoryImpl(DataSource dataSource) {
         this.namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
@@ -44,7 +53,8 @@ public class JdbcUserRepositoryImpl implements UserRepository{
                 .addValue("email", user.getEmail())
                 .addValue("passwd", user.getPasswd())
                 .addValue("login_count", user.getLoginCount())
-                .addValue("last_login_at", user.getLastLoginAt());
+                .addValue("last_login_at", user.getLastLoginAt())
+                .addValue("create_at", user.getCreateAt());
         if (user.getSeq() == null) {
             Number newSeq = insertUser.executeAndReturnKey(parameters);
             user = User.toSequencedUser(newSeq.longValue(), user);
@@ -69,7 +79,7 @@ public class JdbcUserRepositoryImpl implements UserRepository{
     public Optional<User> findById(Long id) throws DataAccessException {
         Map<String, Long> params = Map.of("seq", id);
         User user = this.namedParameterJdbcTemplate.queryForObject(
-                "SELECT * FROM users WHERE seq=:seq",
+                "SELECT * FROM users WHERE seq = :seq",
                 params,
                 userRowMapper
         );
