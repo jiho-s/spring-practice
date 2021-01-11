@@ -77,7 +77,7 @@ public class UserController {
         return CommonResponseDto.fail(error);
     }
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(IdNotFoundException.class)
     public CommonResponseDto<Map<String, String>> handleIdNotFoundException(IdNotFoundException e) {
         Map<String, String> error = Map.of("seq", "not found " + e.getMessage());
