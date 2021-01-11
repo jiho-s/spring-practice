@@ -1,6 +1,7 @@
 package com.github.prgrms.socialserver.domain;
 
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -78,11 +79,17 @@ public class JdbcUserRepositoryImpl implements UserRepository{
     @Override
     public Optional<User> findById(Long id) throws DataAccessException {
         Map<String, Long> params = Map.of("seq", id);
-        User user = this.namedParameterJdbcTemplate.queryForObject(
-                "SELECT * FROM users WHERE seq = :seq",
-                params,
-                userRowMapper
-        );
+        User user;
+        try {
+            user = this.namedParameterJdbcTemplate.queryForObject(
+                    "SELECT * FROM users WHERE seq = :seq",
+                    params,
+                    userRowMapper
+            );
+        } catch (EmptyResultDataAccessException ex) {
+            user = null;
+        }
+
         return Optional.ofNullable(user);
     }
 
