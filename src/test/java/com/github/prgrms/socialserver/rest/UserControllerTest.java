@@ -1,9 +1,9 @@
 package com.github.prgrms.socialserver.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.prgrms.socialserver.domain.User;
 import com.github.prgrms.socialserver.rest.dto.UserRequestDto;
 import com.github.prgrms.socialserver.service.UserService;
-import com.github.prgrms.socialserver.service.dto.UserResponseDto;
 import com.github.prgrms.socialserver.service.exception.IdNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -16,7 +16,9 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -40,20 +42,23 @@ class UserControllerTest {
     @MockBean
     private UserService userService;
 
-    private UserResponseDto user1;
+    private User user1;
+    private User user2;
 
     @BeforeEach
     void setup() {
-        user1 = new UserResponseDto(
+        user1 = new User(
                 1L,
                 "test1@email.com",
+                "pass",
                 0,
                 null,
                 LocalDateTime.now()
         );
-        UserResponseDto user2 = new UserResponseDto(
+        user2 = new User(
                 2L,
                 "test2@email.com",
+                "pass",
                 0,
                 null,
                 LocalDateTime.now()
@@ -62,11 +67,22 @@ class UserControllerTest {
         given(this.userService.findUserById(anyLong())).will((answer) -> {
             Long argument = answer.getArgument(0);
             if (argument.equals(user1.getSeq())) {
-                return user1;
+                return Optional.of(user1);
             } else if (argument.equals(user2.getSeq())) {
-                return user2;
+                return Optional.of(user2);
             }
             throw new IdNotFoundException(String.valueOf(argument));
+        });
+        given(this.userService.saveUser(any(User.class))).will((answer) -> {
+            User argument = answer.getArgument(0);
+            return new User(
+                    3L,
+                    argument.getEmail(),
+                    argument.getPasswd(),
+                    argument.getLoginCount(),
+                    argument.getLastLoginAt(),
+                    argument.getCreateAt()
+            );
         });
 
     }
@@ -166,8 +182,8 @@ class UserControllerTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("seq").value(user1.getSeq()))
                 .andExpect(jsonPath("email").value(user1.getEmail()))
-                .andExpect(jsonPath("login_count").value(user1.getLogin_count()))
-                .andExpect(jsonPath("last_login_at").value(user1.getLast_login_at()))
+                .andExpect(jsonPath("login_count").value(user1.getLoginCount()))
+                .andExpect(jsonPath("last_login_at").value(user1.getLastLoginAt()))
                 .andDo(print());
     }
 

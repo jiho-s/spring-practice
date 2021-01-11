@@ -9,7 +9,9 @@ import com.github.prgrms.socialserver.service.exception.IdNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -26,28 +28,20 @@ public class UserServiceImpl implements UserService{
 
 
     @Override
-    public List<UserResponseDto> findAllUser() {
-        return userRepository.findAll().stream()
-                .map(UserResponseDto::new)
-                .collect(Collectors.toList());
+    public Collection<User> findAllUser() {
+        return userRepository.findAll();
     }
 
     @Override
-    public UserResponseDto findUserById(Long id) {
-        return userRepository.findById(id)
-                .map(UserResponseDto::new)
-                .orElseThrow(() -> new IdNotFoundException(String.valueOf(id)));
+    public Optional<User> findUserById(Long id) {
+        return userRepository.findById(id);
     }
 
     @Override
-    public Long saveUser(UserRequestDto userRequestDto) {
-        if (userRepository.existByEmail(userRequestDto.getPrincipal())) {
-            throw new DuplicateEmailException(userRequestDto.getPrincipal());
+    public User saveUser(User user) {
+        if (userRepository.existByEmail(user.getEmail())) {
+            throw new DuplicateEmailException(user.getEmail());
         }
-        User user = userRepository.save(new User(
-                userRequestDto.getPrincipal(),
-                userRequestDto.getCredentials(),
-                LocalDateTime.now()));
-        return user.getSeq();
+        return userRepository.save(user);
     }
 }

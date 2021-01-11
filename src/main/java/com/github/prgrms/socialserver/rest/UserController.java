@@ -1,5 +1,6 @@
 package com.github.prgrms.socialserver.rest;
 
+import com.github.prgrms.socialserver.domain.User;
 import com.github.prgrms.socialserver.rest.dto.CommonResponseDto;
 import com.github.prgrms.socialserver.rest.dto.UserRequestDto;
 import com.github.prgrms.socialserver.service.UserService;
@@ -16,10 +17,12 @@ import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author jiho
@@ -40,8 +43,13 @@ public class UserController {
 
     @PostMapping("/join")
     public ResponseEntity<CommonResponseDto<String>> createUser(@RequestBody @Valid UserRequestDto userRequestDto, UriComponentsBuilder uriComponentsBuilder) {
-        Long userSeq = userService.saveUser(userRequestDto);
-        UriComponents uriComponents = uriComponentsBuilder.path("/{id}").buildAndExpand(userSeq);
+        User user = new User(
+                userRequestDto.getPrincipal(),
+                userRequestDto.getCredentials(),
+                LocalDateTime.now()
+        );
+        Long seq = userService.saveUser(user).getSeq();
+        UriComponents uriComponents = uriComponentsBuilder.path("/{id}").buildAndExpand(seq);
         return ResponseEntity
                 .created(uriComponents.toUri())
                 .body(CommonResponseDto
@@ -50,12 +58,16 @@ public class UserController {
 
     @GetMapping
     public List<UserResponseDto> queryUsers() {
-        return userService.findAllUser();
+        return userService.findAllUser().stream()
+                .map(UserResponseDto::new)
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
     public UserResponseDto getUser(@PathVariable Long id) {
-        return userService.findUserById(id);
+        return userService.findUserById(id)
+                .map(UserResponseDto::new)
+                .orElseThrow(() -> new IdNotFoundException(String.valueOf(id)));
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
