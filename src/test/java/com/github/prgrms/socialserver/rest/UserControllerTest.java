@@ -110,7 +110,7 @@ class UserControllerTest {
     @DisplayName("User 저장 실패 비밀번호가 공백인 경우")
     public void testCreateUser_Fail_BlankCredentials() throws Exception {
         mockMvc.perform(post("/api/users/join")
-                .content("\"principal\":\"test@email.com\",\"credentials\":null")
+                .content("\"principal\":\"test@email.com\",\"credentials\":\" \"")
                 .contentType(MediaType.APPLICATION_JSON)
         )
                 .andExpect(status().isBadRequest())

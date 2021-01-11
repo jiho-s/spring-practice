@@ -59,7 +59,7 @@ public class UserController {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<CommonResponseDto> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
+    public ResponseEntity<CommonResponseDto<Map<String, String>>> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         Map<String, String> errors = new HashMap<>();
         e.getBindingResult().getAllErrors().forEach((error) -> {
             String fieldName = ((FieldError) error).getField();
@@ -70,13 +70,13 @@ public class UserController {
     }
 
     @ExceptionHandler(DuplicateEmailException.class)
-    public ResponseEntity<CommonResponseDto> handleDuplicateEmailException(DuplicateEmailException e) {
+    public ResponseEntity<CommonResponseDto<Map<String, String>>> handleDuplicateEmailException(DuplicateEmailException e) {
         Map<String, String> error = Map.of("principal", "duplicate " + e.getMessage());
         return ResponseEntity.badRequest().body(CommonResponseDto.fail(error));
     }
 
     @ExceptionHandler(IdNotFoundException.class)
-    public ResponseEntity<CommonResponseDto> handleIdNotFoundException(IdNotFoundException e) {
+    public ResponseEntity<CommonResponseDto<Map<String, String>>> handleIdNotFoundException(IdNotFoundException e) {
         Map<String, String> error = Map.of("seq", "not found " + e.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(CommonResponseDto.fail(error));
     }
