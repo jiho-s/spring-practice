@@ -1,6 +1,7 @@
 package me.jiho.springdatajpa.post;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import me.jiho.springdatajpa.comment.Comment;
@@ -30,5 +31,12 @@ public class Post extends BaseTimeEntity {
 
     public void modify(String text) {
         this.text = text;
+    }
+
+    @Builder
+    public Post(Long id, String text, User user) {
+        super(id);
+        this.text = text;
+        this.user = user;
     }
 }
