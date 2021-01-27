@@ -33,8 +33,7 @@ public class User extends BaseTimeEntity {
     private final List<Comment> comments = new ArrayList<>();
 
     @Builder
-    public User(Long id, String email, String name) {
-        super(id);
+    public User(String email, String name) {
         this.email = email;
         this.name = name;
     }

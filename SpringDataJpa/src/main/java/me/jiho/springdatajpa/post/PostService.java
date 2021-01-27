@@ -43,6 +43,7 @@ public class PostService {
             List<Comment> currentComments = comments.get(post);
             currentComments = currentComments != null ? currentComments : List.of();
             return PostResponseDto.builder()
+                    .post(post)
                     .comments(currentComments)
                     .commentsCount(currentComments.size())
                     .build();

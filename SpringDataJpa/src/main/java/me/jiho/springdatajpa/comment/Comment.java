@@ -29,10 +29,11 @@ public class Comment extends BaseTimeEntity {
     private Post post;
 
     @Builder
-    public Comment(Long id, String text, User author) {
+    public Comment(Long id, String text, User author, Post post) {
         super(id);
         this.text = text;
         this.author = author;
+        this.post = post;
     }
 
     public void modify(String text) {
