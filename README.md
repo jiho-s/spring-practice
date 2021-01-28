@@ -6,6 +6,7 @@
 
 1.  [JDBC Template 연습](#jdbc-template-연습)
 2.  [OAuth2 연습](#oauth2-연습)
+3.  [Spring Data Jpa 연습](#spring-data-jpa-연습)
 
 ## [JDBC Template 연습](./JdbcTemplate)
 
@@ -20,3 +21,8 @@
 - `UserSerivce`
 - `User`
 
+## [Spring Data Jpa](./SpringDataJpa)
+
+- Entity
+- Repository
+- Service
