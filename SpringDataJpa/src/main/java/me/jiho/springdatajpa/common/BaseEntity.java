@@ -17,6 +17,7 @@ import java.util.Objects;
 @Getter
 @MappedSuperclass
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@ToString(of = {"id"})
 public abstract class BaseEntity implements Serializable {
 
     @Id

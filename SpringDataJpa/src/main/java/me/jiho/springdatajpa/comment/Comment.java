@@ -1,9 +1,6 @@
 package me.jiho.springdatajpa.comment;
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import me.jiho.springdatajpa.common.BaseTimeEntity;
 import me.jiho.springdatajpa.post.Post;
 import me.jiho.springdatajpa.user.User;
@@ -19,6 +16,7 @@ import javax.persistence.ManyToOne;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@ToString(of = {"text"}, callSuper = true)
 public class Comment extends BaseTimeEntity {
     private String text;
 

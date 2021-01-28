@@ -17,6 +17,7 @@ import java.util.Set;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@ToString(of = {"email", "name"}, callSuper = true)
 public class User extends BaseTimeEntity {
 
     private String email;
