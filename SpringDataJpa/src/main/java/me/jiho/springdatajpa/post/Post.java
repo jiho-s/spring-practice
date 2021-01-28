@@ -25,6 +25,7 @@ public class Post extends BaseTimeEntity {
     private User user;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    @OrderBy(value = "createdDate ASC")
     private List<Comment> comments = new ArrayList<>();
 
     public void modify(String text) {
@@ -36,5 +37,8 @@ public class Post extends BaseTimeEntity {
         super(id);
         this.text = text;
         this.user = user;
+        if (user != null) {
+            user.getPosts().add(this);
+        }
     }
 }

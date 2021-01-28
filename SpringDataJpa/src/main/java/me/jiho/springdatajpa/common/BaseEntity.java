@@ -1,7 +1,6 @@
 package me.jiho.springdatajpa.common;
 
 import lombok.*;
-import org.springframework.data.jpa.repository.JpaRepository;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;

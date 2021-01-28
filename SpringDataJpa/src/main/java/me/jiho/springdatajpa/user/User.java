@@ -8,7 +8,6 @@ import me.jiho.springdatajpa.post.Post;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 /**
  * @author jiho
