@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="me.jiho.springdatajpa.user.UserTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2021-01-28T02:32:26" hostname="sinjihocBookPro" time="0.022">
+  <properties/>
+  <testcase name="toStringTest()" classname="me.jiho.springdatajpa.user.UserTest" time="0.022"/>
+  <system-out><![CDATA[11:32:26.217 [Test worker] WARN me.jiho.springdatajpa.user.UserTest - User(super=BaseTimeEntity(super=BaseEntity(id=null), createdDate=null, modifiedDate=null), email=test@email.com, name=test)
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

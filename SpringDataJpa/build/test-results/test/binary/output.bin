@@ -1,0 +1,1 @@
+Â11:32:26.217 [Test worker] WARN me.jiho.springdatajpa.user.UserTest - User(super=BaseTimeEntity(super=BaseEntity(id=null), createdDate=null, modifiedDate=null), email=test@email.com, name=test)
