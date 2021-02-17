@@ -5,14 +5,20 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * @author jiho
  * @since 2021/02/03
  */
+@Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member {
 
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String email;
@@ -20,6 +26,9 @@ public class Member {
     private String name;
 
     private String password;
+
+    @Enumerated
+    private Set<MemberRole> roles = new HashSet<>();
 
     @Builder
     public Member(Long id, String email, String name, String password) {
