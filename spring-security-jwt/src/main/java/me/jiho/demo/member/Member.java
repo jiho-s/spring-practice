@@ -27,6 +27,7 @@ public class Member {
 
     private String password;
 
+    @ElementCollection(fetch = FetchType.LAZY)
     @Enumerated
     private Set<MemberRole> roles = new HashSet<>();
 
