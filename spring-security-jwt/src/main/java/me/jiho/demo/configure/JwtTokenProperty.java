@@ -22,4 +22,6 @@ public class JwtTokenProperty {
     private String clientSecret;
 
     private Integer expirySeconds;
+
+    private Long refreshRangeMills;
 }
