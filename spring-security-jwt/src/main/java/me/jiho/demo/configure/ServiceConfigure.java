@@ -1,6 +1,6 @@
 package me.jiho.demo.configure;
 
-import com.auth0.jwt.JWT;
+import me.jiho.demo.security.Jwt;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
 public class ServiceConfigure {
 
     @Bean
-    public JWT jwt(JwtTokenProperty jwtTokenProperty) {
-        return new JWT()
+    public Jwt jwt(JwtTokenProperty jwtTokenProperty) {
+        return new Jwt(jwtTokenProperty);
     }
 }
