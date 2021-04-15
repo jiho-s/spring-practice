@@ -22,7 +22,7 @@ public class EmailPasswordAuthenticationFilter extends AbstractAuthenticationPro
 
     public static final String PASSWORD_KEY = "password";
 
-    private static final AntPathRequestMatcher DEFAULT_ANT_PATH_REQUEST_MATCHER = new AntPathRequestMatcher("/login",
+    private static final AntPathRequestMatcher DEFAULT_ANT_PATH_REQUEST_MATCHER = new AntPathRequestMatcher("/v1/login",
             "POST");
 
     @Getter
@@ -52,7 +52,7 @@ public class EmailPasswordAuthenticationFilter extends AbstractAuthenticationPro
         String password = obtainPassword(request);
         password = (password != null) ? password : "";
         JwtAuthenticationToken authRequest = new JwtAuthenticationToken(email, password);
-        setDetails(request, authRequest);
+//        setDetails(request, authRequest);
 
         return this.getAuthenticationManager().authenticate(authRequest);
     }
