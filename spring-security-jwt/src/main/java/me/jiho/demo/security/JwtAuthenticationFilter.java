@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.ApplicationEventPublisherAware;
 import org.springframework.security.authentication.AuthenticationDetailsSource;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.event.InteractiveAuthenticationSuccessEvent;
@@ -30,7 +31,8 @@ import java.util.regex.Pattern;
  * @since 2021/04/16
  */
 @RequiredArgsConstructor
-public class JwtAuthenticationFilter extends GenericFilterBean {
+public class JwtAuthenticationFilter extends GenericFilterBean
+        implements ApplicationEventPublisherAware {
 
     private ApplicationEventPublisher eventPublisher;
 
@@ -122,5 +124,10 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
 
     private void setDetails(HttpServletRequest request, JwtAuthenticationToken authRequest) {
         authRequest.setDetails(this.authenticationDetailsSource.buildDetails(request));
+    }
+
+    @Override
+    public void setApplicationEventPublisher(ApplicationEventPublisher applicationEventPublisher) {
+
     }
 }
