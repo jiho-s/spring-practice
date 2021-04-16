@@ -54,7 +54,7 @@ public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
                 .formLogin()
                     .disable();
         EmailPasswordAuthenticationFilter authFilter = new EmailPasswordAuthenticationFilter(this.authenticationManager());
-        authFilter.setAuthenticationFailureHandler(new EmailPasswordAuthenticationFailureHandler());
+        authFilter.setAuthenticationFailureHandler(new EmailPasswordAuthenticationFailureHandler(objectMapper));
         authFilter.setAuthenticationSuccessHandler(new EmailPasswordAuthenticationSuccessHandler(objectMapper));
         http
                 .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class);
