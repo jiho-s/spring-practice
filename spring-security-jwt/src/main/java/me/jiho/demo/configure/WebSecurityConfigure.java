@@ -39,6 +39,7 @@ public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) {
         auth.authenticationProvider(new EmailPasswordAuthenticationProvider(jwt, memberService, passwordEncoder));
+        auth.authenticationProvider(new JwtAuthenticationProvider(jwt));
     }
 
     @Override
@@ -46,6 +47,10 @@ public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
         http
                 .csrf()
                     .disable()
+                .authorizeRequests()
+                    .anyRequest()
+                    .authenticated()
+                    .and()
                 .sessionManagement()
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                     .and()
