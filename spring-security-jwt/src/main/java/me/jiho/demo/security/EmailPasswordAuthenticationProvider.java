@@ -74,8 +74,6 @@ public class EmailPasswordAuthenticationProvider implements AuthenticationProvid
         EmailPasswordAuthenticationToken result = new EmailPasswordAuthenticationToken(
                 JwtPrincipal.builder()
                         .id(member.getId())
-                        .email(member.getEmail())
-                        .name(member.getName())
                         .build(),
                 null,
                 createAuthorityList(claims.getRoles()));

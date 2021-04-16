@@ -15,18 +15,11 @@ import java.util.Objects;
 public class JwtPrincipal {
     private final Long id;
 
-    private final String name;
-
-    private final String email;
 
     @Builder
-    public JwtPrincipal(Long id, String name, String email) {
+    public JwtPrincipal(Long id) {
         Assert.notNull(id, "id must be provided.");
-        Assert.notNull(name, "name must be provided.");
-        Assert.notNull(email, "email must be provided.");
         this.id = id;
-        this.name = name;
-        this.email = email;
     }
 
     @Override
@@ -34,11 +27,11 @@ public class JwtPrincipal {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         JwtPrincipal that = (JwtPrincipal) o;
-        return Objects.equals(id, that.id) && Objects.equals(email, that.email);
+        return id.equals(that.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, email);
+        return Objects.hash(id);
     }
 }
