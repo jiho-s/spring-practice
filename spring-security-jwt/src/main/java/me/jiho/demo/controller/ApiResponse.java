@@ -1,5 +1,6 @@
 package me.jiho.demo.controller;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -7,6 +8,7 @@ import lombok.RequiredArgsConstructor;
  * @since 2021/04/16
  */
 @RequiredArgsConstructor
+@Getter
 public class ApiResponse<T> {
 
     private final boolean success;
