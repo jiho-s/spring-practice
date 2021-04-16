@@ -82,7 +82,9 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
         String token = jwt.generateToken(claims);
         result.setDetails(JwtAuthenticationDetail.builder()
                 .token(token)
-                .member(member));
+                .member(member)
+                .build()
+        );
         this.logger.debug("Authenticated member");
         return result;
     }
