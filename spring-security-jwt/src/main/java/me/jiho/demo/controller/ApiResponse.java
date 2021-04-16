@@ -12,6 +12,8 @@ import org.springframework.http.HttpStatus;
 @Getter
 public class ApiResponse<T> {
 
+    public static ApiResponse<?> UNAUTHORIZED = ApiResponse.error("Authentication error (cause: unauthorized)", HttpStatus.UNAUTHORIZED);
+
     private final boolean success;
 
     private final T response;

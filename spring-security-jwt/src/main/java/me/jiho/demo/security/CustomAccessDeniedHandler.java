@@ -9,9 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
-import org.springframework.stereotype.Component;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -23,7 +21,6 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class CustomAccessDeniedHandler implements AccessDeniedHandler {
 
-    public static final ApiResponse<?> E401 = ApiResponse.error("Authentication error (cause: unauthorized)", HttpStatus.UNAUTHORIZED);
 
     private static final Log logger = LogFactory.getLog(CustomAccessDeniedHandler.class);
 
@@ -38,7 +35,7 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
         }
         response.setStatus(HttpStatus.FORBIDDEN.value());
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        response.getWriter().write(objectMapper.writeValueAsString(E401));
+        response.getWriter().write(objectMapper.writeValueAsString(ApiResponse.UNAUTHORIZED));
         response.getWriter().flush();
         response.getWriter().close();
     }
