@@ -29,6 +29,8 @@ public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
 
     private final ObjectMapper objectMapper;
 
+    private final JwtTokenProperty jwtTokenProperty;
+
     @Override
     public void configure(WebSecurity web) {
         web.ignoring().antMatchers("/swagger-resources", "/webjars/**", "/static/**", "/templates/**", "/h2/**");
@@ -56,8 +58,13 @@ public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
         EmailPasswordAuthenticationFilter authFilter = new EmailPasswordAuthenticationFilter(this.authenticationManager());
         authFilter.setAuthenticationFailureHandler(new EmailPasswordAuthenticationFailureHandler(objectMapper));
         authFilter.setAuthenticationSuccessHandler(new EmailPasswordAuthenticationSuccessHandler(objectMapper));
+        JwtAuthenticationFilter jwtAuthenticationFilter = JwtAuthenticationFilter.builder()
+                .authenticationManager(this.authenticationManager())
+                .headerKey(jwtTokenProperty.getHeader())
+                .build();
         http
-                .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(jwtAuthenticationFilter, authFilter.getClass());
 
 
     }
