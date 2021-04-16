@@ -56,8 +56,7 @@ public class Jwt {
                 .sign(algorithm);
     }
 
-    public String refreshToken(String token) throws JWTVerificationException {
-        Claims claims = verify(token);
+    public String refreshToken(Claims claims) throws JWTVerificationException {
         claims.eraseDates();
         return generateToken(claims);
     }
