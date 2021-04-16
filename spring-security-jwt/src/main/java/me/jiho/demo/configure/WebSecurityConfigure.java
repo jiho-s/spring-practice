@@ -49,6 +49,7 @@ public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
                     .and()
                 .exceptionHandling()
                     .accessDeniedHandler(new CustomAccessDeniedHandler(objectMapper))
+                    .authenticationEntryPoint(new CustomAuthenticationEntryPoint(objectMapper))
                     .and()
                 .formLogin()
                     .disable();
