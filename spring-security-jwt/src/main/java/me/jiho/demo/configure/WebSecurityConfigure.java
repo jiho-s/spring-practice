@@ -46,7 +46,10 @@ public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
                     .disable()
                 .sessionManagement()
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
+                    .and()
+                .exceptionHandling()
+                    .accessDeniedHandler(new CustomAccessDeniedHandler(objectMapper))
+                    .and()
                 .formLogin()
                     .disable();
         EmailPasswordAuthenticationFilter authFilter = new EmailPasswordAuthenticationFilter(this.authenticationManager());

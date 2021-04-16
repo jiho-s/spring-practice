@@ -2,6 +2,7 @@ package me.jiho.demo.controller;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 
 /**
  * @author jiho
@@ -21,4 +22,11 @@ public class ApiResponse<T> {
         return new ApiResponse<>(true, response, null);
     }
 
+    public static ApiResponse<?> error(Throwable throwable, HttpStatus status) {
+        return new ApiResponse<>(false, null, new ApiError(throwable, status));
+    }
+
+    public static ApiResponse<?> error(String errorMessage, HttpStatus status) {
+        return new ApiResponse<>(false, null, new ApiError(errorMessage, status));
+    }
 }
