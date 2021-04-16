@@ -1,0 +1,6 @@
+me/jiho/springdatajpa/SpringDataJpaApplicationTests.java
+ me.jiho.springdatajpa.SpringDataJpaApplicationTests
+me/jiho/springdatajpa/user/UserTest.java
+ me.jiho.springdatajpa.user.UserTest
+me/jiho/springdatajpa/post/PostServiceTest.java
+ me.jiho.springdatajpa.post.PostServiceTest
