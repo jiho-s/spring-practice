@@ -37,7 +37,7 @@ public class EmailPasswordAuthenticationProvider implements AuthenticationProvid
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         Assert.isInstanceOf(EmailPasswordAuthenticationToken.class, authentication,
-                () -> this.messages.getMessage("JwtAuthenticationProvider.onlySupports",
+                () -> this.messages.getMessage("EmailPasswordAuthenticationProvider.onlySupports",
                         "Only JwtAuthenticationToken is supported"
                         ));
         Member member = retrieveMember((EmailPasswordAuthenticationToken) authentication);
@@ -49,13 +49,13 @@ public class EmailPasswordAuthenticationProvider implements AuthenticationProvid
         if (authentication.getCredentials() == null) {
             this.logger.debug("Failed to authenticate since no credentials provided");
             throw new BadCredentialsException(this.messages
-                    .getMessage("JwtAuthenticationProvider.badCredentials", "Bad credentials"));
+                    .getMessage("EmailPasswordAuthenticationProvider.badCredentials", "Bad credentials"));
         }
         String presentedPassword = authentication.getCredentials().toString();
         if (!this.passwordEncoder.matches(presentedPassword, member.getPassword())) {
             this.logger.debug("Failed to authenticate since password does not match stored value");
             throw new BadCredentialsException(this.messages
-                    .getMessage("JwtAuthenticationProvider.badCredentials", "Bad credentials"));
+                    .getMessage("EmailPasswordAuthenticationProvider.badCredentials", "Bad credentials"));
         }
     }
 
