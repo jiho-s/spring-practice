@@ -22,7 +22,7 @@ import static org.springframework.security.core.authority.AuthorityUtils.createA
  * @since 2021/04/13
  */
 @RequiredArgsConstructor
-public class JwtAuthenticationProvider implements AuthenticationProvider {
+public class EmailPasswordAuthenticationProvider implements AuthenticationProvider {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -36,16 +36,16 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-        Assert.isInstanceOf(JwtAuthenticationToken.class, authentication,
+        Assert.isInstanceOf(EmailPasswordAuthenticationToken.class, authentication,
                 () -> this.messages.getMessage("JwtAuthenticationProvider.onlySupports",
                         "Only JwtAuthenticationToken is supported"
                         ));
-        Member member = retrieveMember((JwtAuthenticationToken) authentication);
-        authenticationChecks(member, (JwtAuthenticationToken) authentication);
+        Member member = retrieveMember((EmailPasswordAuthenticationToken) authentication);
+        authenticationChecks(member, (EmailPasswordAuthenticationToken) authentication);
         return createSuccessAuthentication(member);
     }
 
-    private void authenticationChecks(Member member, JwtAuthenticationToken authentication) throws AuthenticationException {
+    private void authenticationChecks(Member member, EmailPasswordAuthenticationToken authentication) throws AuthenticationException {
         if (authentication.getCredentials() == null) {
             this.logger.debug("Failed to authenticate since no credentials provided");
             throw new BadCredentialsException(this.messages
@@ -59,11 +59,11 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
         }
     }
 
-    private String determineEmail(JwtAuthenticationToken authentication) {
+    private String determineEmail(EmailPasswordAuthenticationToken authentication) {
         return (authentication.getPrincipal() == null) ? "NONE_PROVIDED" : authentication.getName();
     }
 
-    private Member retrieveMember(JwtAuthenticationToken authentication) throws AuthenticationException {
+    private Member retrieveMember(EmailPasswordAuthenticationToken authentication) throws AuthenticationException {
         String email = determineEmail(authentication);
         return this.memberService.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException(email));
@@ -71,7 +71,7 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
 
     private Authentication createSuccessAuthentication(Member member) {
         Claims claims = Claims.of(member);
-        JwtAuthenticationToken result = new JwtAuthenticationToken(
+        EmailPasswordAuthenticationToken result = new EmailPasswordAuthenticationToken(
                 JwtPrincipal.builder()
                         .id(member.getId())
                         .email(member.getEmail())
@@ -80,7 +80,7 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
                 null,
                 createAuthorityList(claims.getRoles()));
         String token = jwt.generateToken(claims);
-        result.setDetails(JwtAuthenticationDetail.builder()
+        result.setDetails(EmailPasswordAuthenticationDetail.builder()
                 .token(token)
                 .member(member)
                 .build()
@@ -91,6 +91,6 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
 
     @Override
     public boolean supports(Class<?> authentication) {
-        return JwtAuthenticationToken.class.isAssignableFrom(authentication);
+        return EmailPasswordAuthenticationToken.class.isAssignableFrom(authentication);
     }
 }

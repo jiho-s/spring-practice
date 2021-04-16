@@ -18,7 +18,7 @@ import java.io.IOException;
  * @since 2021/04/16
  */
 @RequiredArgsConstructor
-public class JwtAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
+public class EmailPasswordAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
 
     private final ObjectMapper objectMapper;
 

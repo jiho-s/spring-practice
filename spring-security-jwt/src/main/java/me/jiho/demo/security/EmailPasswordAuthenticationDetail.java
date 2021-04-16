@@ -11,14 +11,14 @@ import org.springframework.util.Assert;
  * @since 2021/04/14
  */
 @Getter
-public class JwtAuthenticationDetail {
+public class EmailPasswordAuthenticationDetail {
 
     private final String token;
 
     private final MemberDto member;
 
     @Builder
-    public JwtAuthenticationDetail(String token, Member member) {
+    public EmailPasswordAuthenticationDetail(String token, Member member) {
         Assert.notNull(token, "apiToken must be provided.");
         Assert.notNull(member, "member must be provided.");
         this.token = token;

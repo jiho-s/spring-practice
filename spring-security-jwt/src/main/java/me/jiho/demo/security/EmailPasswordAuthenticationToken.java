@@ -10,21 +10,21 @@ import java.util.Collection;
  * @author jiho
  * @since 2021/04/13
  */
-public class JwtAuthenticationToken extends AbstractAuthenticationToken {
+public class EmailPasswordAuthenticationToken extends AbstractAuthenticationToken {
 
     private final Object principal;
 
     private String credentials;
 
-    public JwtAuthenticationToken(String principal, String credentials) {
+    public EmailPasswordAuthenticationToken(String principal, String credentials) {
         super(null);
         this.principal = principal;
         this.credentials = credentials;
         super.setAuthenticated(false);
     }
 
-    public JwtAuthenticationToken(Object principal, String credentials,
-                                  Collection<? extends GrantedAuthority> authorities) {
+    public EmailPasswordAuthenticationToken(Object principal, String credentials,
+                                            Collection<? extends GrantedAuthority> authorities) {
         super(authorities);
         this.principal = principal;
         this.credentials = credentials;

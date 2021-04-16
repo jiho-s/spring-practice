@@ -51,7 +51,7 @@ public class EmailPasswordAuthenticationFilter extends AbstractAuthenticationPro
         email = (email != null) ? email : "";
         String password = obtainPassword(request);
         password = (password != null) ? password : "";
-        JwtAuthenticationToken authRequest = new JwtAuthenticationToken(email, password);
+        EmailPasswordAuthenticationToken authRequest = new EmailPasswordAuthenticationToken(email, password);
 //        setDetails(request, authRequest);
 
         return this.getAuthenticationManager().authenticate(authRequest);
@@ -65,7 +65,7 @@ public class EmailPasswordAuthenticationFilter extends AbstractAuthenticationPro
         return request.getParameter(this.passwordParameter);
     }
 
-    private void setDetails(HttpServletRequest request, JwtAuthenticationToken authRequest) {
+    private void setDetails(HttpServletRequest request, EmailPasswordAuthenticationToken authRequest) {
         authRequest.setDetails(this.authenticationDetailsSource.buildDetails(request));
     }
 

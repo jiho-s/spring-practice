@@ -36,7 +36,7 @@ public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) {
-        auth.authenticationProvider(new JwtAuthenticationProvider(jwt, memberService, passwordEncoder));
+        auth.authenticationProvider(new EmailPasswordAuthenticationProvider(jwt, memberService, passwordEncoder));
     }
 
     @Override
@@ -50,8 +50,8 @@ public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
                 .formLogin()
                     .disable();
         EmailPasswordAuthenticationFilter authFilter = new EmailPasswordAuthenticationFilter(this.authenticationManager());
-        authFilter.setAuthenticationFailureHandler(new JwtAuthenticationFailureHandler());
-        authFilter.setAuthenticationSuccessHandler(new JwtAuthenticationSuccessHandler(objectMapper));
+        authFilter.setAuthenticationFailureHandler(new EmailPasswordAuthenticationFailureHandler());
+        authFilter.setAuthenticationSuccessHandler(new EmailPasswordAuthenticationSuccessHandler(objectMapper));
         http
                 .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class);
 
